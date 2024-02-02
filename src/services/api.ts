@@ -126,7 +126,7 @@ export const useApi = () => {
   const generateCompletion = async (
     request: GenerateCompletionRequest,
     onDataReceived: (data: GenerateCompletionResponse) => void,
-  ): Promise<GenerateCompletionResponse[]> => {
+  ): Promise<String> => {
     const res = await fetch(getApiUrl(''), {
       // mode: 'no-cors',
       method: 'POST',
@@ -143,24 +143,15 @@ export const useApi = () => {
     }
 
     const reader = res.body?.getReader()
-    let results: GenerateCompletionResponse[] = []
+    let text = ''
 
     if (reader) {
-      while (true) {
-        const { done, value } = await reader.read()
-        if (done) {
-          break
-        }
+        const { value } = await reader.read()
 
-        const chunk = new TextDecoder().decode(value)
-        const parsedChunk: GenerateCompletionPartResponse = JSON.parse(chunk)
-
-        onDataReceived(parsedChunk)
-        results.push(parsedChunk)
-      }
+        text = new TextDecoder().decode(value)
     }
 
-    return results
+    return text
   }
 
   // Create a model

@@ -209,7 +209,8 @@ export function useChats() {
     data: GenerateCompletionPartResponse,
     chatId: number,
   ) => {
-    ongoingAiMessages.value.has(chatId)
+    debugger
+    return ongoingAiMessages.value.has(chatId)
       ? appendToAiMessage(data.response, chatId)
       : startAiMessage(data.response, chatId)
   }
@@ -218,8 +219,10 @@ export function useChats() {
     data: GenerateCompletionCompletedResponse,
     chatId: number,
   ) => {
+    debugger
     const aiMessage = ongoingAiMessages.value.get(chatId)
     if (aiMessage) {
+      debugger
       try {
         await dbLayer.updateMessage(aiMessage.id!, { context: data.context })
         ongoingAiMessages.value.delete(chatId)
@@ -279,6 +282,7 @@ export function useChats() {
       createdAt: new Date(),
     }
 
+    debugger
     try {
       message.id = await dbLayer.addMessage(message)
       ongoingAiMessages.value.set(chatId, message)

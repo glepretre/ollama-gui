@@ -19,8 +19,10 @@ const onSubmit = () => {
 
   if (isInputValid.value) {
     addUserMessage(userInput.value.trim()).then(() => {
+      debugger
       isAiResponding.value = false
     })
+    debugger
     userInput.value = ''
     isAiResponding.value = true
   }
@@ -34,6 +36,7 @@ const onKeydown = (event: KeyboardEvent) => {
   if (shouldSubmit(event)) {
     // Pressing enter while the ai is responding should not abort the request
     if (isAiResponding.value) {
+      debugger
       return
     }
 
