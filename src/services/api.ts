@@ -115,7 +115,7 @@ export type GenerateEmbeddingsResponse = {
 
 // Define a method to get the full API URL for a given path
 const getApiUrl = (path: string) =>
-  `${baseUrl.value || 'http://localhost:11434/api'}${path}`
+  `${baseUrl.value || 'http://localhost:5000/tars/api'}${path}`
 
 const abortController = ref<AbortController>(new AbortController())
 const signal = ref<AbortSignal>(abortController.value.signal)
@@ -127,10 +127,12 @@ export const useApi = () => {
     request: GenerateCompletionRequest,
     onDataReceived: (data: GenerateCompletionResponse) => void,
   ): Promise<GenerateCompletionResponse[]> => {
-    const res = await fetch(getApiUrl('/generate'), {
+    const res = await fetch(getApiUrl(''), {
+      // mode: 'no-cors',
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
       },
       body: JSON.stringify(request),
       signal: signal.value,
